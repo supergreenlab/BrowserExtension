@@ -17,37 +17,29 @@ body {
     text-align: center;
   }
 
-  #options__button {
-    width: 50%;
-    background: green;
-    color: white;
-    font-weight: 500;
-    border-radius: 15px;
-    padding: 5px 10px;
-    justify-content: center;
-    margin: 20px auto;
-    cursor: pointer;
-    opacity: 0.8;
-    display: flex;
+  input {
+    border: 1pt solid #dedede;
+    border-radius: 5px;
+    margin: 2pt 0;
+    padding: 2pt 5pt;
   }
 
-  .links__holder {
-    ul {
-      display: flex;
-      margin-top: 1em;
-      justify-content: space-around;
+  button {
+    border-radius: 5px;
+    background-color: #3bb30b;
+    color: white;
+    font-weight: bold;
+    padding: 5pt 15pt;
+    cursor: pointer;
+  }
 
-      li {
-        button {
-          border-radius: 25px;
-          font-size: 20px;
-          font-weight: 600;
-          padding: 10px 17px;
-          background-color: rgba(0, 0, 255, 0.7);
-          color: white;
-          cursor: pointer;
-        }
-      }
-    }
+  button:hover {
+    background-color: #2bc30b;
+  }
+
+  #center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
