@@ -1,8 +1,15 @@
-const matches = ['cannabis', 'grow', 'weed', 'seeds', 'indoor', 'homegrowing', '420', 'smoke', 'thc', 'cbd', 'vape', 'lst', 'topping', 'hst', 'dwc', 'hydro', 'soil', 'furniture', 'sensor', 'nutrient', 'PH', 'EC', 'LED', 'hps', 'light']
+const matches = ['cannabis', 'grow', 'weed', 'seeds', 'seed', 'indoor', 'homegrowing', '420', 'smoke', 'thc', 'cbd', 'vape', 'lst', 'topping', 'hst', 'dwc', 'hydro', 'soil', 'furniture', 'sensor', 'nutrient', 'PH', 'EC', 'LED', 'hps', 'light', 'supergreenlab']
+const blacklist = ['google']
 
 let added = false
 
 const injectButton = async () => {
+  const isBlacklisted = new RegExp(`${blacklist.join('|')}/i`, 'i').test(
+    document.location.hostname
+  )
+
+  if (isBlacklisted) return
+
   if (added) return
 
 	const loggedIn = await chrome.runtime.sendMessage({'loggedIn': true})
@@ -57,7 +64,7 @@ const injectButton = async () => {
 }
 
 const checkIsPlantRelated = () => {
-  const isPlantRelated = new RegExp(`${matches.join('|')}/i`, 'i').test(
+  const isPlantRelated = new RegExp(`${matches.map(m => `\\b${m}\\b`).join('|')}/i`, 'i').test(
     document.body.innerText
   )
   if (isPlantRelated) {

@@ -27,11 +27,24 @@ const Login = (props) => {
   )
 }
 
+const bookmarkPage = async () => {
+}
+
 const LoggedIn = () => {
+  const [url, setUrl] = React.useState('');
+  React.useEffect(() => {
+    const getPage = async () => {
+      const tabs = await browser.tabs.query({ active: true, currentWindow: true })
+      setUrl(tabs[0].url)
+    }
+    getPage()
+  }, [])
   return (
     <section id="popup">
       <div id='center'>
         <div>You are loggedIn</div>
+        <b>{ url }</b>
+        <button onClick={() => chrome.runtime.sendMessage({'bookmark': url})}>Bookmark this page</button>
       </div>
     </section>
   )
