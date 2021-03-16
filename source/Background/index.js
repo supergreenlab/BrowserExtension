@@ -2,14 +2,14 @@ import 'emoji-log';
 import axios from 'axios'
 import browser from 'webextension-polyfill';
 
-const API_URL='https://api2.supergreenlab.com'
+const API_URL = process.env.NODE_ENV == 'development' ? 'http://192.168.1.87:8080' : 'https://api2.supergreenlab.com'
 
 const sendBookmark = async (bookmark) => {
   const stored = await browser.storage.local.get('token')
   if (!stored.token) return;
 
-  const resp = await axios.post(`${API_URL}/extension/bookmark`, {
-    bookmark
+  const resp = await axios.post(`${API_URL}/linkbookmark`, {
+    url: bookmark
   }, {
     headers: {
       'Authorization': `Bearer ${stored.token}`,
@@ -27,7 +27,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, _) => {
 
 chrome.runtime.onMessage.addListener((request, __, sendResponse) => {
 	if (request.bookmark) {
-    sendBookmark(request.bookmark)
+    return sendBookmark(request.bookmark)
 	} else if (request.loggedIn) {
     return browser.storage.local.get('token').then(stored => !!stored.token)
   }
@@ -35,4 +35,5 @@ chrome.runtime.onMessage.addListener((request, __, sendResponse) => {
 
 browser.runtime.onInstalled.addListener(() => {
   console.emoji('🦄', 'extension installed');
+  console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 });

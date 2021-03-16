@@ -4,7 +4,7 @@ import browser from 'webextension-polyfill';
 
 import './styles.scss'
 
-const API_URL='https://api2.supergreenlab.com'
+const API_URL = process.env.NODE_ENV == 'development' ? 'http://192.168.1.87:8080' : 'https://api2.supergreenlab.com'
 
 const Login = (props) => {
   const { handleLogin } = props
@@ -13,25 +13,26 @@ const Login = (props) => {
 
   return (
     <section id="popup">
-      <h2>SuperGreenLab</h2>
-      <div>
-        Login:<br />
-        <input type="text" value={login} onChange={e => setLogin(e.target.value)} />
+      <div id='center'>
+        <h2>Super<span class='green'>Green</span>Lab</h2>
+        <div>
+          Login:<br />
+          <input type="text" value={login} onChange={e => setLogin(e.target.value)} />
+        </div>
+        <div>
+          Password:<br />
+          <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
+        </div>
+        <button class='cta' onClick={() => handleLogin(login, password)}>Login</button>
       </div>
-      <div>
-        Password:<br />
-        <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
-      </div>
-      <button onClick={() => handleLogin(login, password)}>Login</button>
     </section>
   )
 }
 
-const bookmarkPage = async () => {
-}
-
 const LoggedIn = () => {
   const [url, setUrl] = React.useState('');
+  const [sent, setSent] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   React.useEffect(() => {
     const getPage = async () => {
       const tabs = await browser.tabs.query({ active: true, currentWindow: true })
@@ -39,12 +40,27 @@ const LoggedIn = () => {
     }
     getPage()
   }, [])
+  const sendBookmark = async () => {
+    setLoading(true)
+    await chrome.runtime.sendMessage({'bookmark': url})
+    setSent(true)
+    setLoading(false)
+  }
+  if (loading) {
+    return (
+      <Loading />
+    );
+  }
+  const logo = browser.runtime.getURL('assets/icons/favicon-48.png')
   return (
-    <section id="popup">
+    <section id="popup" style={{backgroundImage: `url(${logo})`}}>
       <div id='center'>
-        <div>You are loggedIn</div>
-        <b>{ url }</b>
-        <button onClick={() => chrome.runtime.sendMessage({'bookmark': url})}>Bookmark this page</button>
+        <div>Current page URL:</div>
+        <b id='url'>{ url }</b>
+        { sent ? 
+            <h2>Alright, <span class='green'>sent!</span> Thanks 💚</h2> :
+            <button onClick={sendBookmark}>Bookmark this page</button>
+        }
       </div>
     </section>
   )
@@ -63,6 +79,7 @@ const Loading = () => {
 const Popup = () => {
   const [loggedIn, setLoggedIn] = React.useState(false)
   const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState('')
 
   React.useEffect(() => {
     const checkToken = async () => {
@@ -77,12 +94,25 @@ const Popup = () => {
 
   const handleLogin = async (login, password) => {
     setLoading(true)
-    const resp = await axios.post(`${API_URL}/login`, {
-      handle: login,
-      password,
-    })
+    try {
+      const resp = await axios.post(`${API_URL}/login`, {
+        handle: login,
+        password,
+      })
+    } catch(e) {
+      setLoading(false)
+      setLoggedIn(false)
+      return
+    }
 
-    await browser.storage.local.set({token: resp.headers['x-sgl-token']})
+    const token = resp.headers['x-sgl-token']
+    if (!token) {
+      setLoading(false)
+      setLoggedIn(false)
+      return
+    }
+
+    await browser.storage.local.set({token})
     setLoading(false)
     setLoggedIn(true)
   }

@@ -1,21 +1,24 @@
-const matches = ['cannabis', 'grow', 'weed', 'seeds', 'seed', 'indoor', 'homegrowing', '420', 'smoke', 'thc', 'cbd', 'vape', 'lst', 'topping', 'hst', 'dwc', 'hydro', 'soil', 'furniture', 'sensor', 'nutrient', 'PH', 'EC', 'LED', 'hps', 'light', 'supergreenlab']
+import browser from 'webextension-polyfill';
+
+const matches = ['marijuana', 'cannabis', 'grow', 'growing', 'weed', 'seeds', 'seed', 'indoor', 'homegrowing', '420', 'smoke', 'thc', 'cbd', 'vape', 'lst', 'topping', 'hst', 'dwc', 'hydro', 'soil', 'furniture', 'sensor', 'nutrient', 'PH', 'EC', 'LED', 'hps', 'light', 'supergreenlab', 'vegetative', 'bloom', 'blooming', 'bud', 'UV', 'IR', 'spectrum', 'Lights']
 const blacklist = ['google']
 
 let added = false
 
 const injectButton = async () => {
+  if (added) return
+  added = true
+
   const isBlacklisted = new RegExp(`${blacklist.join('|')}/i`, 'i').test(
     document.location.hostname
   )
 
   if (isBlacklisted) return
 
-  if (added) return
-
 	const loggedIn = await chrome.runtime.sendMessage({'loggedIn': true})
 
-  added = true
   const div = document.createElement('div')
+  div.style.display = 'flex'
   div.style.borderWidth = '2pt'
   div.style.borderColor = '#3bb30b'
   div.style.borderRadius = '5px'
@@ -31,9 +34,15 @@ const injectButton = async () => {
 
   setTimeout(() => (div.style.top = '-5px'), 100)
 
+  const logo = document.createElement('img')
+  logo.src = browser.runtime.getURL('assets/icons/favicon-48.png')
+  div.appendChild(logo)
+
   const button = document.createElement('a')
+  button.style.margin = '0 10pt'
   button.style.textDecoration = 'none'
-  button.innerText = loggedIn ? 'Bookmark and share this page!' : 'Please login to bookmark and share this page!'
+  button.style.textAlign = 'center'
+  button.innerText = loggedIn ? 'Looks like this page could interest the community?\nBookmark and/or share it!' : 'Please login to bookmark and share this page!'
   button.href = 'javascript:void(0)'
   button.addEventListener('click', () => {
     if (!loggedIn) {
@@ -42,7 +51,7 @@ const injectButton = async () => {
 		chrome.runtime.sendMessage({'bookmark': document.location.href})
     button.innerText = 'Alright, sent! Thanks 💚'
     setTimeout(() => {
-      div.style.top = '-60px'
+      div.style.top = '-100px'
     }, 1000)
   })
   div.appendChild(button)
@@ -74,10 +83,13 @@ const checkIsPlantRelated = () => {
 
 chrome.runtime.onMessage.addListener(async (request, __, ___) => {
 	if (request.url) {
+    added = false;
 		checkIsPlantRelated()
 	}
 })
 
 window.addEventListener('load', checkIsPlantRelated, false)
+
+setInterval(checkIsPlantRelated, 2000);
 
 export {}
