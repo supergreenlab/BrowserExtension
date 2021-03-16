@@ -15,7 +15,7 @@ const injectButton = async () => {
 
   if (isBlacklisted) return
 
-	const loggedIn = await chrome.runtime.sendMessage({'loggedIn': true})
+  const loggedIn = await chrome.runtime.sendMessage({'loggedIn': true})
 
   const div = document.createElement('div')
   div.style.display = 'flex'
@@ -48,7 +48,7 @@ const injectButton = async () => {
     if (!loggedIn) {
       return
     }
-		chrome.runtime.sendMessage({'bookmark': document.location.href})
+    chrome.runtime.sendMessage({'bookmark': document.location.href})
     button.innerText = 'Alright, sent! Thanks 💚'
     setTimeout(() => {
       div.style.top = '-100px'
@@ -82,10 +82,10 @@ const checkIsPlantRelated = () => {
 }
 
 chrome.runtime.onMessage.addListener(async (request, __, ___) => {
-	if (request.url) {
+  if (request.url) {
     added = false;
-		checkIsPlantRelated()
-	}
+    checkIsPlantRelated()
+  }
 })
 
 window.addEventListener('load', checkIsPlantRelated, false)
