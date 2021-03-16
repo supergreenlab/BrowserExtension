@@ -35,5 +35,4 @@ chrome.runtime.onMessage.addListener((request, __, sendResponse) => {
 
 browser.runtime.onInstalled.addListener(() => {
   console.emoji('🦄', 'extension installed');
-  console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 });

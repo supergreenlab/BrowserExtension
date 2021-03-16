@@ -5,9 +5,20 @@ const blacklist = ['google']
 
 let added = false
 
+const divID = Math.random().toString(36).substr(2, 5);
+
+const removeDiv = (div) => {
+  div.style.top = '-100px'
+  setTimeout(() => {
+    document.body.removeChild(div)
+  }, 500);
+}
+
 const injectButton = async () => {
   if (added) return
   added = true
+
+  if (document.getElementById(divID)) return
 
   const isBlacklisted = new RegExp(`${blacklist.join('|')}`, 'i').test(
     document.location.hostname
@@ -18,6 +29,7 @@ const injectButton = async () => {
   const loggedIn = await chrome.runtime.sendMessage({'loggedIn': true})
 
   const div = document.createElement('div')
+  div.setAttribute("id", divID)
   div.style.display = 'flex'
   div.style.borderWidth = '2pt'
   div.style.borderColor = '#3bb30b'
@@ -51,7 +63,7 @@ const injectButton = async () => {
     chrome.runtime.sendMessage({'bookmark': document.location.href})
     button.innerText = 'Alright, sent! Thanks 💚'
     setTimeout(() => {
-      div.style.top = '-100px'
+      removeDiv(div)
     }, 1000)
   })
   div.appendChild(button)
@@ -65,7 +77,7 @@ const injectButton = async () => {
   close.style.top = '7px'
   close.style.right = '2px'
   close.addEventListener('click', () => {
-    div.style.top = '-100px'
+    removeDiv(div)
   })
   div.appendChild(close)
 
