@@ -1,13 +1,13 @@
 {
-  "name": "web-extension-starter",
-  "version": "3.0.0",
-  "description": "Web extension starter using react and javascript",
+  "name": "SuperGreenLab",
+  "version": "0.0.1",
+  "description": "Bookmark useful links into the SGL app from your computer browser.",
   "private": true,
-  "repository": "https://github.com/abhijithvijayan/web-extension-starter.git",
+  "repository": "https://github.com/supergreenlab/BrowserExtension.git",
   "author": {
-    "name": "abhijithvijayan",
-    "email": "email@abhijithvijayan.in",
-    "url": "https://abhijithvijayan.in"
+    "name": "vitaminwater",
+    "email": "stant@supergreenlab.com",
+    "url": "https://www.supergreenlab.com"
   },
   "license": "MIT",
   "engines": {

@@ -9,7 +9,7 @@ const injectButton = async () => {
   if (added) return
   added = true
 
-  const isBlacklisted = new RegExp(`${blacklist.join('|')}/i`, 'i').test(
+  const isBlacklisted = new RegExp(`${blacklist.join('|')}`, 'i').test(
     document.location.hostname
   )
 
@@ -26,7 +26,7 @@ const injectButton = async () => {
   div.style.padding = '15px 15px 10px 10px'
   div.style.position = 'fixed'
   div.style.backgroundColor = 'white'
-  div.style.top = '-60px'
+  div.style.top = '-100px'
   div.style.right = '5px'
   div.style.zIndex = 1000
   div.style.display = 'flex'
@@ -65,7 +65,7 @@ const injectButton = async () => {
   close.style.top = '7px'
   close.style.right = '2px'
   close.addEventListener('click', () => {
-    div.style.top = '-60px'
+    div.style.top = '-100px'
   })
   div.appendChild(close)
 
@@ -73,7 +73,7 @@ const injectButton = async () => {
 }
 
 const checkIsPlantRelated = () => {
-  const isPlantRelated = new RegExp(`${matches.map(m => `\\b${m}\\b`).join('|')}/i`, 'i').test(
+  const isPlantRelated = new RegExp(`${matches.map(m => `\\b${m}\\b`).join('|')}`, 'i').test(
     document.body.innerText
   )
   if (isPlantRelated) {
