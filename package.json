@@ -1,6 +1,6 @@
 {
   "name": "SuperGreenLab",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Bookmark useful links into the SGL app from your computer browser.",
   "private": true,
   "repository": "https://github.com/supergreenlab/BrowserExtension.git",

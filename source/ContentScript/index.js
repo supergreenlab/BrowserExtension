@@ -40,9 +40,14 @@ const injectButton = async () => {
   div.style.backgroundColor = 'white'
   div.style.top = '-100px'
   div.style.right = '5px'
-  div.style.zIndex = 1000
+  div.style.zIndex = '1000 !important'
   div.style.display = 'flex'
   div.style.transition = 'top 0.3s'
+  div.style.fontSize = '12pt'
+  div.style.lineHeight = '14.4pt'
+  div.style.color = 'black !important'
+  div.style.fontWeight = '300 !important'
+  div.style.fontFamily = 'Roboto !important'
 
   setTimeout(() => (div.style.top = '-5px'), 100)
 
@@ -51,6 +56,7 @@ const injectButton = async () => {
   div.appendChild(logo)
 
   const button = document.createElement('a')
+  button.style.color = 'black'
   button.style.margin = '0 10pt'
   button.style.textDecoration = 'none'
   button.style.textAlign = 'center'
@@ -72,10 +78,10 @@ const injectButton = async () => {
   close.style.textDecoration = 'none'
   close.innerText = '❌'
   close.href = 'javascript:void(0)'
-  close.style.fontSize = '8px'
+  close.style.fontSize = '12px'
   close.style.position = 'absolute'
   close.style.top = '7px'
-  close.style.right = '2px'
+  close.style.right = '5px'
   close.addEventListener('click', () => {
     removeDiv(div)
   })
